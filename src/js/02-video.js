@@ -1,4 +1,4 @@
-// HTML містить <iframe> з відео для Vimeo плеєра. Напиши скрипт, який буде зберігати поточний 
+// HTML містить <iframe> з відео для Vimeo плеєра. Напиши скрипт, який буде зберігати поточний
 // час відтворення відео у локальне сховище і, після перезавантаження сторінки, продовжувати
 //  відтворювати відео з цього часу.
 
@@ -19,9 +19,20 @@
 // Ініціалізуй плеєр у файлі скрипта як це описано в секції pre-existing player, але враховуй, що у
 //  тебе плеєр доданий як npm пакет, а не через CDN.
 // Вивчи документацію методу on() і почни відстежувати подію timeupdate - оновлення часу відтворення.
-// Зберігай час відтворення у локальне сховище. Нехай ключем для сховища буде рядок 
+// Зберігай час відтворення у локальне сховище. Нехай ключем для сховища буде рядок
 // "videoplayer-current-time".
-// Під час перезавантаження сторінки скористайся методом setCurrentTime() з метою відновлення 
+// Під час перезавантаження сторінки скористайся методом setCurrentTime() з метою відновлення
 // відтворення зі збереженої позиції.
 // Додай до проекту бібліотеку lodash.throttle і зроби так, щоб час відтворення оновлювався у сховищі
 //  не частіше, ніж раз на секунду.
+import throttle from 'lodash.throttle';
+import Player from '@vimeo/player';
+
+const iframe = document.querySelector('#vimeo-player');
+const player = new Player(iframe);
+
+const getPlayerCurrentTime = function (event) {
+  localStorage.setItem('videoplayer-current-time', event.seconds);
+};
+player.on('timeupdate', throttle(getPlayerCurrentTime, 1000));
+player.setCurrentTime(localStorage.getItem('videoplayer-current-time'));
