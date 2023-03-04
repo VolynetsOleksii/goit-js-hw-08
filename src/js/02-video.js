@@ -34,5 +34,9 @@ const player = new Player(iframe);
 const getPlayerCurrentTime = function (event) {
   localStorage.setItem('videoplayer-current-time', event.seconds);
 };
+
 player.on('timeupdate', throttle(getPlayerCurrentTime, 1000));
-player.setCurrentTime(localStorage.getItem('videoplayer-current-time'));
+
+if (localStorage.getItem('videoplayer-current-time')) {
+  player.setCurrentTime(localStorage.getItem('videoplayer-current-time'));
+}
